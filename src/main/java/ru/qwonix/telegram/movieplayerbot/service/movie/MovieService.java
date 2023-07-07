@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface MovieService {
 
-    Optional<Movie> find(Long id);
+    Optional<Movie> findById(Long id);
 
     List<Movie> findByShow(Show show);
 

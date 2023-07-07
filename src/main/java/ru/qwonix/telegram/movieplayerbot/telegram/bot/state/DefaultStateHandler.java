@@ -32,8 +32,6 @@ public class DefaultStateHandler extends State {
 
     private final BotService botService;
 
-    private final UserService userService;
-
     public DefaultStateHandler(BotCommand botCommand, VideoCallbackHandler videoCallbackHandler, EpisodeCallbackHandler episodeCallbackHandler, SeasonCallbackHandler seasonCallbackHandler, SeriesCallbackHandler seriesCallbackHandler, MovieCallbackHandler movieCallbackHandler, BotService botService, UserService userService) {
         this.botCommand = botCommand;
         this.videoCallbackHandler = videoCallbackHandler;
@@ -42,7 +40,6 @@ public class DefaultStateHandler extends State {
         this.seriesCallbackHandler = seriesCallbackHandler;
         this.movieCallbackHandler = movieCallbackHandler;
         this.botService = botService;
-        this.userService = userService;
     }
 
     @Override

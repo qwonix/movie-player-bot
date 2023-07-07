@@ -6,5 +6,5 @@ import ru.qwonix.telegram.movieplayerbot.entity.Show;
 import java.util.Optional;
 
 public interface ShowService {
-    Optional<Show> find(int id);
+    Optional<Show> findById(Long id);
 }

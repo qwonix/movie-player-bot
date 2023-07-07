@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SeasonService {
-    Optional<Season> find(Long id);
+    Optional<Season> findById(Long id);
 
     List<Season> findAllBySeriesOrderByNumberWithLimitAndPage(Series series, int limit, int page);
 

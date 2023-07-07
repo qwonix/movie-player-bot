@@ -38,7 +38,7 @@ public class MovieCallbackHandler {
 
 
     public void handle(User user, MovieCallbackData callbackData) throws NoSuchMovieException, NoSuchVideoException {
-        Optional<Movie> optionalMovie = movieService.find(callbackData.movieId);
+        Optional<Movie> optionalMovie = movieService.findById(callbackData.movieId);
         Movie movie;
         if (optionalMovie.isPresent()) {
             movie = optionalMovie.get();

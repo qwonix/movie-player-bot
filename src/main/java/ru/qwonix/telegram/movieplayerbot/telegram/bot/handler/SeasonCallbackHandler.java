@@ -48,7 +48,7 @@ public class SeasonCallbackHandler  {
     }
 
     public void handle(User user, SeasonCallbackData callbackData) throws NoSuchSeasonException, NoSuchEpisodeException, JsonProcessingException {
-        Optional<Season> optionalSeason = seasonService.find(callbackData.seasonId);
+        Optional<Season> optionalSeason = seasonService.findById(callbackData.seasonId);
         Season season;
         if (optionalSeason.isPresent()) {
             season = optionalSeason.get();

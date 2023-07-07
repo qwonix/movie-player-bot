@@ -4,14 +4,15 @@ import org.springframework.stereotype.Component;
 import ru.qwonix.telegram.movieplayerbot.service.telegram.BotService;
 import ru.qwonix.telegram.movieplayerbot.service.user.UserService;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.handler.*;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.utils.BotCommand;
 
 @Component
 public class SearchStateHandler extends DefaultStateHandler {
     private final UserService userService;
     private final BotService botService;
 
-    public SearchStateHandler(VideoCallbackHandler videoCallbackHandler, EpisodeCallbackHandler episodeCallbackHandler, SeasonCallbackHandler seasonCallbackHandler, SeriesCallbackHandler seriesCallbackHandler, MovieCallbackHandler movieCallbackHandler, BotService botService, UserService userService) {
-        super(botCommand, emptyCallbackHandler, videoCallbackHandler, episodeCallbackHandler, seasonCallbackHandler, seriesCallbackHandler, movieCallbackHandler, botService, userService);
+    public SearchStateHandler(BotCommand botCommand, VideoCallbackHandler videoCallbackHandler, EpisodeCallbackHandler episodeCallbackHandler, SeasonCallbackHandler seasonCallbackHandler, SeriesCallbackHandler seriesCallbackHandler, MovieCallbackHandler movieCallbackHandler, BotService botService, UserService userService) {
+        super(botCommand, videoCallbackHandler, episodeCallbackHandler, seasonCallbackHandler, seriesCallbackHandler, movieCallbackHandler, botService, userService);
         this.userService = userService;
         this.botService = botService;
     }

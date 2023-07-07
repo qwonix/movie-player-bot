@@ -15,7 +15,6 @@ public class User {
     private String username;
     private String languageCode;
 
-
     private boolean isAdmin;
 
     private StateType state;
