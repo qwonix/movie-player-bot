@@ -3,6 +3,7 @@ package ru.qwonix.telegram.movieplayerbot.telegram.bot.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -18,8 +19,9 @@ import ru.qwonix.telegram.movieplayerbot.service.telegram.BotService;
 import ru.qwonix.telegram.movieplayerbot.service.user.UserService;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.MovieCallbackData;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.SeasonCallbackData;
-import ru.qwonix.telegram.movieplayerbot.telegram.bot.handler.SeriesCallbackHandler;
-import ru.qwonix.telegram.movieplayerbot.telegram.bot.config.TelegramConfig;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.SeriesCallbackData;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.handler.EmptyCallbackHandler;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.TelegramConfig;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -45,12 +47,9 @@ public class BotCommand {
     private final MovieService movieService;
     private final SeriesService seriesService;
     private final EpisodeService episodeService;
-
-    private final SeriesCallbackHandler seriesCallbackHandler;
-
     private final SeasonService seasonService;
 
-    public BotCommand(ObjectMapper objectMapper, TelegramConfig telegramConfig, BotService botService, UserService userService, MovieService movieService, SeriesService seriesService, EpisodeService episodeService, SeriesCallbackHandler seriesCallbackHandler, SeasonService seasonService) {
+    public BotCommand(ObjectMapper objectMapper, TelegramConfig telegramConfig, BotService botService, UserService userService, MovieService movieService, SeriesService seriesService, EpisodeService episodeService, SeasonService seasonService) {
         this.objectMapper = objectMapper;
         this.telegramConfig = telegramConfig;
         this.botService = botService;
@@ -58,7 +57,6 @@ public class BotCommand {
         this.movieService = movieService;
         this.seriesService = seriesService;
         this.episodeService = episodeService;
-        this.seriesCallbackHandler = seriesCallbackHandler;
         this.seasonService = seasonService;
     }
 
@@ -95,7 +93,7 @@ public class BotCommand {
         {
             Map<String, String> keyboardMap = new LinkedHashMap<>();
 
-            for (Movie movie : movieService.findByShow(Show.builder().id(1).build())) {
+            for (Movie movie : movieService.findByShow(Show.builder().id(1L).build())) {
                 keyboardMap.put(movie.getTitle(), objectMapper.writeValueAsString(new MovieCallbackData(movie.getId())));
             }
             moviesKeyboard = TelegramBotUtils.createOneRowCallbackKeyboard(keyboardMap);
@@ -125,7 +123,7 @@ public class BotCommand {
             seasonsKeyboard = TelegramBotUtils.createKeyboard(keyboardMap, 5, 2);
 
             if (pagesCount > 1) {
-                List<InlineKeyboardButton> controlButtons = seriesCallbackHandler.createControlButtons(series.getId(), pagesCount, page);
+                List<InlineKeyboardButton> controlButtons = createControlButtons(series.getId(), pagesCount, page);
                 seasonsKeyboard.add(controlButtons);
             }
         }
@@ -230,5 +228,36 @@ public class BotCommand {
 //        }
 //        log.info("export by {}", user);
 //    }
+
+   private List<InlineKeyboardButton> createControlButtons(Long seriesId, int pagesCount, int currentPage) throws JsonProcessingException {
+        InlineKeyboardButton previous;
+        InlineKeyboardButton next;
+
+        if (currentPage == 0) {
+            previous = InlineKeyboardButton.builder()
+                    .callbackData(objectMapper.writeValueAsString(new EmptyCallbackHandler()))
+                    .text("×").build();
+        } else {
+            previous = InlineKeyboardButton.builder()
+                    .callbackData(objectMapper.writeValueAsString(new SeriesCallbackData(seriesId, currentPage - 1)))
+                    .text("‹").build();
+        }
+
+        if (pagesCount == currentPage + 1) {
+            next = InlineKeyboardButton.builder()
+                    .callbackData(objectMapper.writeValueAsString(new EmptyCallbackHandler()))
+                    .text("×").build();
+        } else {
+            next = InlineKeyboardButton.builder()
+                    .callbackData(objectMapper.writeValueAsString(new SeriesCallbackData(seriesId, currentPage + 1)))
+                    .text("›").build();
+        }
+
+        InlineKeyboardButton current = InlineKeyboardButton.builder()
+                .callbackData(objectMapper.writeValueAsString(new EmptyCallbackHandler()))
+                .text(currentPage + 1 + "/" + pagesCount).build();
+
+        return Arrays.asList(previous, current, next);
+    }
 
 }

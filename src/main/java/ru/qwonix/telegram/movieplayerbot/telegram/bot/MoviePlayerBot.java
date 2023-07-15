@@ -1,5 +1,6 @@
-package ru.qwonix.telegram.movieplayerbot.telegram.bot.config;
+package ru.qwonix.telegram.movieplayerbot.telegram.bot;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -18,7 +19,7 @@ public class MoviePlayerBot extends TelegramLongPollingBot {
     private final DefaultStateHandler defaultStateHandler;
     private final UserService userService;
 
-    public MoviePlayerBot(TelegramConfig telegramConfig, DefaultStateHandler defaultStateHandler, UserService userService) {
+    public MoviePlayerBot(TelegramConfig telegramConfig, @Lazy DefaultStateHandler defaultStateHandler, UserService userService) {
         super(telegramConfig.BOT_TOKEN);
         this.telegramConfig = telegramConfig;
         this.defaultStateHandler = defaultStateHandler;

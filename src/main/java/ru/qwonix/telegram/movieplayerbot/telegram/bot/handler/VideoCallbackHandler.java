@@ -15,7 +15,7 @@ import ru.qwonix.telegram.movieplayerbot.service.telegram.BotService;
 import ru.qwonix.telegram.movieplayerbot.service.user.UserService;
 import ru.qwonix.telegram.movieplayerbot.service.video.VideoService;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.VideoCallbackData;
-import ru.qwonix.telegram.movieplayerbot.telegram.bot.config.TelegramConfig;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.TelegramConfig;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.utils.TelegramBotUtils;
 
 import java.util.LinkedHashMap;

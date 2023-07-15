@@ -18,7 +18,7 @@ import ru.qwonix.telegram.movieplayerbot.service.telegram.BotService;
 import ru.qwonix.telegram.movieplayerbot.service.user.UserService;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.EpisodeCallbackData;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.SeasonCallbackData;
-import ru.qwonix.telegram.movieplayerbot.telegram.bot.config.TelegramConfig;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.TelegramConfig;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.utils.TelegramBotUtils;
 
 

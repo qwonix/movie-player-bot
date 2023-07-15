@@ -1,7 +1,7 @@
 package ru.qwonix.telegram.movieplayerbot.service.telegram;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,21 +17,13 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaVideo;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.qwonix.telegram.movieplayerbot.entity.MessageIds;
 import ru.qwonix.telegram.movieplayerbot.entity.User;
-import ru.qwonix.telegram.movieplayerbot.telegram.bot.config.TelegramConfig;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.TelegramConfig;
 
 @Slf4j
-@Component
+@Service
 public class BotServiceImpl implements BotService {
 
     private final TelegramLongPollingBot bot;

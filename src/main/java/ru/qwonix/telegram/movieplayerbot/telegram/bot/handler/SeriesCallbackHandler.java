@@ -19,7 +19,7 @@ import ru.qwonix.telegram.movieplayerbot.service.telegram.BotService;
 import ru.qwonix.telegram.movieplayerbot.service.user.UserService;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.SeasonCallbackData;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.SeriesCallbackData;
-import ru.qwonix.telegram.movieplayerbot.telegram.bot.config.TelegramConfig;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.TelegramConfig;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.utils.TelegramBotUtils;
 
 import java.util.*;
@@ -115,6 +115,7 @@ public class SeriesCallbackHandler {
                 + String.format("_%s_", series.getDescription());
     }
 
+// TODO: 13.07.2023 create general control buttons generator
     public List<InlineKeyboardButton> createControlButtons(Long seriesId, int pagesCount, int currentPage) throws JsonProcessingException {
         InlineKeyboardButton previous;
         InlineKeyboardButton next;
@@ -125,7 +126,7 @@ public class SeriesCallbackHandler {
                     .text("×").build();
         } else {
             previous = InlineKeyboardButton.builder()
-                    .callbackData(new SeriesCallbackData(seriesId, currentPage - 1).toString())
+                    .callbackData(objectMapper.writeValueAsString(new SeriesCallbackData(seriesId, currentPage - 1)))
                     .text("‹").build();
         }
 
@@ -135,7 +136,7 @@ public class SeriesCallbackHandler {
                     .text("×").build();
         } else {
             next = InlineKeyboardButton.builder()
-                    .callbackData(new SeriesCallbackData(seriesId, currentPage + 1).toString())
+                    .callbackData(objectMapper.writeValueAsString(new SeriesCallbackData(seriesId, currentPage + 1)))
                     .text("›").build();
         }
 
