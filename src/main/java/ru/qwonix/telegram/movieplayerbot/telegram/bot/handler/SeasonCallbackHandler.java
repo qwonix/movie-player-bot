@@ -108,8 +108,9 @@ public class SeasonCallbackHandler  {
                 + String.format("_%s_\n", season.getDescription())
                 + '\n'
                 + String.format("*Количество эпизодов*: `%d` / *%s*\n", episodesCount, season.getTotalEpisodesCount())
-                + String.format("Премьера: `%s`\n", season.getFormattedPremiereReleaseDate())
-                + String.format("Финал: `%s`\n", season.getFormattedFinalReleaseDate());
+//                + String.format("Премьера: `%s`\n", season.getFormattedPremiereReleaseDate())
+//                + String.format("Финал: `%s`\n", season.getFormattedFinalReleaseDate())
+                ;
     }
 
     private InlineKeyboardMarkup createControlButtons(Long seasonId, List<Episode> episodes, int page, int pagesCount) throws JsonProcessingException {

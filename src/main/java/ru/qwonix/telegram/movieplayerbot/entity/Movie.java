@@ -20,7 +20,7 @@ public class Movie {
     @JoinColumn(name = "show_id")
     private Show show;
 
-    @OneToMany
+    @OneToMany(mappedBy = "movie")
     private List<Video> videos;
 
     private String previewTgFileId;

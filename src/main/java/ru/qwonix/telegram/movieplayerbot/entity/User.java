@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.stereotype.Component;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.state.StateType;
 
@@ -32,6 +33,7 @@ public class User {
 
     private boolean isAdmin;
 
+    @Enumerated(EnumType.STRING)
     private StateType state;
 
     @Convert(converter = MessageIdsJsonConverter.class)

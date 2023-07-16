@@ -1,17 +1,16 @@
 package ru.qwonix.telegram.movieplayerbot.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
+import javax.persistence.*;
 import java.util.Objects;
 
-@ToString
-@Builder(toBuilder = true)
-@Getter
-@Setter
+@Data
+@Entity
+@Table(name = "video")
 public class Video {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String resolution;
     private String audioLanguage;
@@ -19,6 +18,14 @@ public class Video {
     private Integer priority;
 
     private String videoTgFileId;
+
+    @ManyToOne
+    @JoinColumn(name = "episode_id")
+    private Episode episode;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
 
     @Override
     public boolean equals(Object o) {

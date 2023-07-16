@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
     <changeSet
-            id="2013-03-02-initial-schema-1" author="qwonix">
+            id="2023-07-13-01-initial-schema" author="qwonix">
         <createTable tableName="user">
             <column name="telegram_id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="telegram_id_pkey"/>
@@ -18,12 +18,15 @@
             <column name="is_admin" type="boolean" defaultValueBoolean="false"/>
 
             <column name="state" type="varchar(30)"/>
-            <column name="message_ids" type="json"/>
+            <column name="message_ids" type="text"/>
         </createTable>
 
         <createTable tableName="show">
             <column name="id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="show_id_pkey"/>
+            </column>
+            <column name="title" type="text" >
+                <constraints nullable="false"/>
             </column>
             <column name="description" type="text" />
 
@@ -40,7 +43,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="text"/>
-            <column name="movie_id" type="bigint">
+            <column name="show_id" type="bigint">
                 <constraints nullable="false" foreignKeyName="movie_show_id_fk" references="show(id)"/>
             </column>
             <column name="preview_tg_file_id" type="varchar(100)">
@@ -107,7 +110,7 @@
             <column name="episode_id" type="bigint">
                 <constraints nullable="false" foreignKeyName="episode_details_episode_id_fk" references="episode(id)"/>
             </column>
-            <column name="production_code" type="int"/>
+            <column name="production_code" type="text"/>
             <column name="release_date" type="date"/>
             <column name="release_language" type="text"/>
             <column name="release_country" type="text"/>
@@ -124,24 +127,17 @@
             <column name="audio_language" type="text"/>
             <column name="subtitles_language" type="text"/>
 
+            <column name="episode_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="episode_video_id_fk" references="episode(id)"/>
+            </column>
+
+            <column name="movie_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="movie_video_id_fk" references="movie(id)"/>
+            </column>
+
             <column name="video_tg_file_id" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-        <createTable tableName="entity_video">
-            <column name="entity_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-
-            <column name="entity_type" type="text">
-                <constraints nullable="false"/>
-            </column>
-
-            <column name="video_id" type="bigint">
-                <constraints nullable="false" foreignKeyName="entity_video_video_id_fk" references="video(id)"/>
-            </column>
-        </createTable>
-
     </changeSet>
 </databaseChangeLog>

@@ -25,7 +25,7 @@ public class Episode {
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
 
-    @OneToMany
+    @OneToMany(mappedBy = "episode")
     private List<Video> videos;
 
     private String previewTgFileId;
