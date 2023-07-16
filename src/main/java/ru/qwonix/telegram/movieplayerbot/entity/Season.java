@@ -5,18 +5,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-@ToString
-@Builder(toBuilder = true)
 @Data
+@Entity
+@Table(name = "season")
 public class Season {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer number;
     private String description;
     private Integer totalEpisodesCount;
+    @ManyToOne
+    @JoinColumn(name = "series_id")
     private Series series;
 
     private String previewTgFileId;

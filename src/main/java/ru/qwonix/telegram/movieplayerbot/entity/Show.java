@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
-@AllArgsConstructor
-@ToString
-@Builder(toBuilder = true)
+import javax.persistence.*;
+
 @Data
+@Entity
+@Table(name = "show")
 public class Show {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
     private String title;
