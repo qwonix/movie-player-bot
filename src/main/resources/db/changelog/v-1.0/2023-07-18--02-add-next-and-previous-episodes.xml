@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <changeSet
+            id="2023-07-18--02-add-next-and-previous-episodes" author="qwonix">
+        <addColumn tableName="episode">
+            <column name="previous_episode_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="previous_episode_id_fk" references="episode(id)"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="episode">
+            <column name="next_episode_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="next_episode_id_fk" references="episode(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
