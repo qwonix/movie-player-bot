@@ -44,35 +44,26 @@ public class DefaultStateHandler extends State {
 
     @Override
     public void onCallback() {
-        String callbackData = update.getCallbackQuery().getData();
+        String jsonCallbackData = update.getCallbackQuery().getData();
         String callbackId = update.getCallbackQuery().getId();
-        Callback callback;
+        CallbackData callbackData;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            callback = objectMapper.readValue(callbackData, Callback.class);
-
+            callbackData = objectMapper.readValue(jsonCallbackData, CallbackData.class);
         } catch (Exception e) {
             return;
         }
         try {
-            switch (callback.getType()) {
-                case VIDEO:
-                    videoCallbackHandler.handle(user, (VideoCallbackData) callback.getData());
-                    break;
-                case EPISODE:
-                    episodeCallbackHandler.handle(user, (EpisodeCallbackData) callback.getData());
-                    break;
-                case SEASON:
-                    seasonCallbackHandler.handle(user, (SeasonCallbackData) callback.getData());
-                    break;
-                case SERIES:
-                    seriesCallbackHandler.handle(user, (SeriesCallbackData) callback.getData());
-                    break;
-                case MOVIE:
-                    movieCallbackHandler.handle(user, (MovieCallbackData) callback.getData());
-                    break;
-                case EMPTY:
-                default:
+            if (callbackData instanceof VideoCallbackData) {
+                videoCallbackHandler.handle(user, (VideoCallbackData) callbackData);
+            } else if (callbackData instanceof EpisodeCallbackData) {
+                episodeCallbackHandler.handle(user, (EpisodeCallbackData) callbackData);
+            } else if (callbackData instanceof SeasonCallbackData) {
+                seasonCallbackHandler.handle(user, (SeasonCallbackData) callbackData);
+            } else if (callbackData instanceof SeriesCallbackData) {
+                seriesCallbackHandler.handle(user, (SeriesCallbackData) callbackData);
+            } else if (callbackData instanceof MovieCallbackData) {
+                movieCallbackHandler.handle(user, (MovieCallbackData) callbackData);
             }
         } catch (NoSuchCallbackException e) {
             throw new RuntimeException(e);
@@ -80,8 +71,7 @@ public class DefaultStateHandler extends State {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
-        log.info("user {} callback {}", user, callback);
+        log.info("user {} callback {}", user, callbackData);
         botService.executeAlert(callbackId, false);
     }
 

@@ -23,6 +23,17 @@ public class EpisodeDetails {
     private LocalDate releaseDate;
     private String releaseLanguage;
     private String releaseCountry;
-    @Column(name = "duration", columnDefinition = "interval")
-    private Duration duration;
+//    @Column(name = "duration", columnDefinition = "interval")
+//    private Duration duration;
+
+    @Override
+    public String toString() {
+        return "EpisodeDetails{" +
+                "id=" + id +
+                ", productionCode='" + productionCode + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", releaseLanguage='" + releaseLanguage + '\'' +
+                ", releaseCountry='" + releaseCountry + '\'' +
+                '}';
+    }
 }

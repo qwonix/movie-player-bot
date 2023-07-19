@@ -19,7 +19,6 @@ import ru.qwonix.telegram.movieplayerbot.service.video.VideoService;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.EpisodeCallbackData;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.VideoCallbackData;
 
-
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -60,8 +59,8 @@ public class EpisodeCallbackHandler {
             throw new NoSuchVideoException("Видео не найдено. Попробуйте заново.");
         }
 
-        Optional<Episode> nextEpisode = episodeService.findNext(episode);
-        Optional<Episode> previousEpisode = episodeService.findPrevious(episode);
+        Optional<Episode> nextEpisode = Optional.ofNullable(episode.getNext());
+        Optional<Episode> previousEpisode = Optional.ofNullable(episode.getPrevious());
         int seasonEpisodesCount = episodeService.countAllBySeason(episode.getSeason());
 
         List<List<InlineKeyboardButton>> controlButtons

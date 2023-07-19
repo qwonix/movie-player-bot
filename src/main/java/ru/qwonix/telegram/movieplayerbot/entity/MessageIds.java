@@ -33,7 +33,7 @@ public class MessageIds {
         return videoMessageId != null;
     }
 
-    public void reset() {
+    public void clear() {
         this.setSeriesMessageId(null);
         this.setSeasonMessageId(null);
         this.setEpisodeMessageId(null);

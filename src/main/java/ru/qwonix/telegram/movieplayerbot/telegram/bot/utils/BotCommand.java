@@ -3,25 +3,27 @@ package ru.qwonix.telegram.movieplayerbot.telegram.bot.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.qwonix.telegram.movieplayerbot.entity.*;
+import ru.qwonix.telegram.movieplayerbot.entity.Movie;
+import ru.qwonix.telegram.movieplayerbot.entity.Season;
+import ru.qwonix.telegram.movieplayerbot.entity.Series;
+import ru.qwonix.telegram.movieplayerbot.entity.User;
 import ru.qwonix.telegram.movieplayerbot.service.episode.EpisodeService;
 import ru.qwonix.telegram.movieplayerbot.service.movie.MovieService;
 import ru.qwonix.telegram.movieplayerbot.service.season.SeasonService;
 import ru.qwonix.telegram.movieplayerbot.service.series.SeriesService;
 import ru.qwonix.telegram.movieplayerbot.service.telegram.BotService;
 import ru.qwonix.telegram.movieplayerbot.service.user.UserService;
+import ru.qwonix.telegram.movieplayerbot.telegram.bot.TelegramConfig;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.MovieCallbackData;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.SeasonCallbackData;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.callback.SeriesCallbackData;
 import ru.qwonix.telegram.movieplayerbot.telegram.bot.handler.EmptyCallbackHandler;
-import ru.qwonix.telegram.movieplayerbot.telegram.bot.TelegramConfig;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -86,14 +88,14 @@ public class BotCommand {
 
     @Command("/all")
     public void all(User user, String[] args) throws JsonProcessingException {
-        botService.deleteMessageIds(user, user.getMessageIds());
-        user.getMessageIds().reset();
+        botService.deleteAllMessagesFromUserMessageIds(user);
+        user.getMessageIds().clear();
         userService.merge(user);
         List<List<InlineKeyboardButton>> moviesKeyboard;
         {
             Map<String, String> keyboardMap = new LinkedHashMap<>();
 
-            for (Movie movie : movieService.findByShow(Show.builder().id(1L).build())) {
+            for (Movie movie : movieService.findAllByShowId(1L)) {
                 keyboardMap.put(movie.getTitle(), objectMapper.writeValueAsString(new MovieCallbackData(movie.getId())));
             }
             moviesKeyboard = TelegramBotUtils.createOneRowCallbackKeyboard(keyboardMap);
@@ -118,7 +120,7 @@ public class BotCommand {
             List<Season> seriesSeasons = seasonService.findAllBySeriesOrderByNumberWithLimitAndPage(series, limit, page);
 
             for (Season season : seriesSeasons) {
-                keyboardMap.put("Сезон " + season.getNumber(), new SeasonCallbackData(season.getId(), 0).toString());
+                keyboardMap.put("Сезон " + season.getNumber(), objectMapper.writeValueAsString(new SeasonCallbackData(season.getId(), 0)));
             }
             seasonsKeyboard = TelegramBotUtils.createKeyboard(keyboardMap, 5, 2);
 
@@ -194,16 +196,16 @@ public class BotCommand {
         }
     }
 
-    @Command("/set_available")
-    public void set_available(User user, String[] args) {
-        if (!user.isAdmin()) {
-            botService.sendMarkdownText(user, "Вы не являетесь администратором. Для получения прав используйте /admin <password>");
-            return;
-        }
-        if (args.length == 2) {
-            episodeService.setAvailableByEpisodeProductionCode(Integer.parseInt(args[0]), Boolean.valueOf(args[1]));
-        }
-    }
+//    @Command("/set_available")
+//    public void set_available(User user, String[] args) {
+//        if (!user.isAdmin()) {
+//            botService.sendMarkdownText(user, "Вы не являетесь администратором. Для получения прав используйте /admin <password>");
+//            return;
+//        }
+//        if (args.length == 2) {
+//            episodeService.setAvailableByEpisodeProductionCode(Integer.parseInt(args[0]), Boolean.valueOf(args[1]));
+//        }
+//    }
 
 //    @Command("/export_video_videofileid")
 //    public void export_video_videofileid(User user, String[] args) {
@@ -229,7 +231,7 @@ public class BotCommand {
 //        log.info("export by {}", user);
 //    }
 
-   private List<InlineKeyboardButton> createControlButtons(Long seriesId, int pagesCount, int currentPage) throws JsonProcessingException {
+    private List<InlineKeyboardButton> createControlButtons(Long seriesId, int pagesCount, int currentPage) throws JsonProcessingException {
         InlineKeyboardButton previous;
         InlineKeyboardButton next;
 
