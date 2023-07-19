@@ -10,13 +10,8 @@ import java.util.Optional;
 public interface EpisodeService {
     Optional<Episode> findById(Long id);
 
-    Optional<Episode> findNext(Episode episode);
-
-    Optional<Episode> findPrevious(Episode episode);
-
     List<Episode> findAllBySeasonOrderByNumberWithLimitAndPage(Season season, int limit, int page);
 
     int countAllBySeason(Season season);
 
-    void setAvailableByEpisodeProductionCode(int episodeProductionCode, Boolean isAvailable);
 }

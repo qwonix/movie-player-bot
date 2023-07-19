@@ -9,7 +9,7 @@ import ru.qwonix.telegram.movieplayerbot.entity.User;
 public interface BotService {
     String getProvidedByText();
 
-    void deleteMessageIds(User user, MessageIds messagesIds);
+    void deleteAllMessagesFromUserMessageIds(User user);
 
     Integer sendVideoWithKeyboard(User user, String fileId, InlineKeyboardMarkup keyboard);
 

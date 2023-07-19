@@ -52,18 +52,18 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public void deleteMessageIds(User user, MessageIds messagesIds) {
-        if (messagesIds.hasSeasonMessageId()) {
-            deleteMessage(user, messagesIds.getSeasonMessageId());
+    public void deleteAllMessagesFromUserMessageIds(User user) {
+        if (user.getMessageIds().hasSeasonMessageId()) {
+            deleteMessage(user, user.getMessageIds().getSeasonMessageId());
         }
-        if (messagesIds.hasEpisodeMessageId()) {
-            deleteMessage(user, messagesIds.getEpisodeMessageId());
+        if (user.getMessageIds().hasEpisodeMessageId()) {
+            deleteMessage(user, user.getMessageIds().getEpisodeMessageId());
         }
-        if (messagesIds.hasVideoMessageId()) {
-            deleteMessage(user, messagesIds.getVideoMessageId());
+        if (user.getMessageIds().hasVideoMessageId()) {
+            deleteMessage(user, user.getMessageIds().getVideoMessageId());
         }
-        if (messagesIds.hasSeriesMessageId()) {
-            deleteMessage(user, messagesIds.getSeriesMessageId());
+        if (user.getMessageIds().hasSeriesMessageId()) {
+            deleteMessage(user, user.getMessageIds().getSeriesMessageId());
         }
     }
 

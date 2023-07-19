@@ -8,9 +8,7 @@ import java.util.Optional;
 public interface UserService {
     User makeAdmin(User user);
 
-    boolean exists(long chatId);
-
     void merge(User user);
 
-    Optional<User> findUser(long userChatId);
+    Optional<User> findUser(Long userChatId);
 }
