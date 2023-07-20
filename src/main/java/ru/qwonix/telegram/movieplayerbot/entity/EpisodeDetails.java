@@ -14,11 +14,6 @@ public class EpisodeDetails {
     @Column(name = "episode_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "episode_id")
-    private Episode episode;
-
     private String productionCode;
     private LocalDate releaseDate;
     private String releaseLanguage;

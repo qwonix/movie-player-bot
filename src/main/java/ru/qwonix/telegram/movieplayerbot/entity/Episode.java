@@ -17,7 +17,8 @@ public class Episode {
     private String description;
     private Integer number;
 
-    @OneToOne(mappedBy = "episode", cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
     private EpisodeDetails episodeDetails;
 
 
