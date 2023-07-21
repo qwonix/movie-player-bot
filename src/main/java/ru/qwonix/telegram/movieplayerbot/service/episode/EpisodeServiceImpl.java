@@ -29,8 +29,19 @@ public class EpisodeServiceImpl implements EpisodeService {
     }
 
     @Override
-    public int countAllBySeason(Season season) {
+    public Integer countAllBySeason(Season season) {
         return episodeRepository.countAllBySeason(season);
+    }
+
+    @Override
+    public Optional<Episode> getNextEpisode(Episode episode) {
+        return Optional.ofNullable(episode.getNext());
+    }
+
+    @Override
+    public Optional<Episode> getPreviousEpisode(Episode episode) {
+        return Optional.ofNullable(episode.getPrevious());
+
     }
 
 }

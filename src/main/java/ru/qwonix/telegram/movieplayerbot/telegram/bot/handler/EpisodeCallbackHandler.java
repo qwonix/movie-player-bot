@@ -42,29 +42,13 @@ public class EpisodeCallbackHandler {
         this.videoService = videoService;
     }
 
-    public void handle(User user, EpisodeCallbackData episodeCallbackData) throws NoSuchEpisodeException, NoSuchVideoException, JsonProcessingException {
-        Optional<Episode> optionalEpisode = episodeService.findById(episodeCallbackData.episodeId);
-        Episode episode;
-        if (optionalEpisode.isPresent()) {
-            episode = optionalEpisode.get();
-        } else {
-            throw new NoSuchEpisodeException("Такого эпизода не существует. Попробуйте найти его заново.");
-        }
-        Optional<Video> maxPriorityOptionalVideo = videoService.findMaxPriorityByEpisode(episode);
-
-        Video maxPriorityVideo;
-        if (maxPriorityOptionalVideo.isPresent()) {
-            maxPriorityVideo = maxPriorityOptionalVideo.get();
-        } else {
-            throw new NoSuchVideoException("Видео не найдено. Попробуйте заново.");
-        }
-
-        Optional<Episode> nextEpisode = Optional.ofNullable(episode.getNext());
-        Optional<Episode> previousEpisode = Optional.ofNullable(episode.getPrevious());
-        int seasonEpisodesCount = episodeService.countAllBySeason(episode.getSeason());
+    private void handle(User user, Episode episode) throws NoSuchVideoException, JsonProcessingException {
+        Optional<Episode> nextEpisode = episodeService.getNextEpisode(episode);
+        Optional<Episode> previousEpisode = episodeService.getPreviousEpisode(episode);
+        Integer totalEpisodesCountInSeason = episodeService.countAllBySeason(episode.getSeason());
 
         List<List<InlineKeyboardButton>> controlButtons
-                = createControlButtons(episode, nextEpisode, previousEpisode, seasonEpisodesCount);
+                = createControlButtons(episode, nextEpisode, previousEpisode, totalEpisodesCountInSeason);
 
         String episodeText = createText(episode);
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup(controlButtons);
@@ -83,12 +67,27 @@ public class EpisodeCallbackHandler {
                     , keyboard
             );
             messagesIds.setEpisodeMessageId(episodeMessageId);
+            userService.merge(user);
         }
 
+        Optional<Video> maxPriorityOptionalVideo = videoService.findMaxPriorityByEpisode(episode);
 
+        Video maxPriorityVideo;
+        if (maxPriorityOptionalVideo.isPresent()) {
+            maxPriorityVideo = maxPriorityOptionalVideo.get();
+        } else {
+            throw new NoSuchVideoException("Видео не найдено. Попробуйте заново.");
+        }
         videoCallbackHandler.handle(user, new VideoCallbackData(maxPriorityVideo.getId()));
+    }
 
-        userService.merge(user);
+    public void handle(User user, EpisodeCallbackData episodeCallbackData) throws NoSuchEpisodeException, NoSuchVideoException, JsonProcessingException {
+        Optional<Episode> episode = episodeService.findById(episodeCallbackData.episodeId);
+        if (episode.isPresent()) {
+            handle(user, episode.get());
+        } else {
+            throw new NoSuchEpisodeException("Такого эпизода не существует. Попробуйте найти его заново.");
+        }
     }
 
     private static String createText(Episode episode) {
@@ -108,7 +107,7 @@ public class EpisodeCallbackHandler {
             Episode currentEpisode
             , Optional<Episode> nextEpisode
             , Optional<Episode> previousEpisode
-            , int seasonEpisodesCount) throws JsonProcessingException {
+            , Integer seasonEpisodesCount) throws JsonProcessingException {
         InlineKeyboardButton previous;
         InlineKeyboardButton next;
 
