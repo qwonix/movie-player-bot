@@ -1,0 +1,34 @@
+version: '3'
+services:
+  # Приложение
+  app:
+    image: qwonix/movie-player-bot-app:2.0.0
+    container_name: movie-player-bot
+    depends_on:
+      - db  # Зависимость от контейнера с базой данных
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db/movie_player_bot
+      bot.username:
+      bot.token:
+
+  # Контейнер для PostgreSQL базы данных
+  db:
+    image: postgres:15
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "books_db" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    container_name: movie-player-bot-postgres
+    restart: always
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_DB: movie_player_bot
+      POSTGRES_USER: movie_player_bot_user
+      POSTGRES_PASSWORD: movie_player_bot_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Сохранение данных PostgreSQL между перезапусками контейнера
+
+volumes:
+  postgres_data:
